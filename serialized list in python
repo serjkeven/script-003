@@ -30,7 +30,7 @@ class slist():
         inner_element += [None]
         if self.length != 0:
             self.elements[self.last][1] = element
-        self.elements.append(inner_element)
+        self.elements += [inner_element]
         self.__update__()
 ##clear
     def clean(self):
