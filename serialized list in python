@@ -1,0 +1,116 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Fri Mar 20 09:37:28 2020
+
+@author: Luxsoft_SKavenin
+"""
+
+class slist():
+    def __init__(self):
+        self.elements = []
+        self.length = 0
+        self.last = None
+        
+#trigger like function       
+    def __update__(self):
+        self.length = len(self.elements)
+        if self.length != 0:
+            self.last = self.length - 1
+        else:
+            self.last = None
+# = with trigger
+    def equals(self,new_self):
+        self.elements = new_self.elements
+        self.__update__()
+        
+##append
+    def add(self,element = None):    
+        inner_element = []
+        inner_element += [element]
+        inner_element += [None]
+        if self.length != 0:
+            self.elements[self.last][1] = element
+        self.elements.append(inner_element)
+        self.__update__()
+##clear
+    def clean(self):
+        self.elements = []
+        self.__update__()
+##copy
+    def duplicate(self, from_pos = 0, to_pos = None):             
+        new = slist()
+        if to_pos == None:
+            to_pos = self.length
+        if to_pos != 0:
+            [new.elements.append(self.elements[i]) for i in range(from_pos, to_pos)]
+        new.__update__()
+        return new
+##count   
+    def amount(self, element):      
+        return sum(1 for elem in self.elements if elem[0] == element)
+##extend
+    def union(self, new):
+        [self.add(x[0]) for x in new.elements]
+##index
+    def position(self, element):
+        if self.length != 0:
+            founded = [i for i in range(0,self.length) if self.elements[i][0] == element]
+            return founded[0] if len(founded) != 0 else None 
+
+    def __interract__(self,index,element,type):
+        pre = self.duplicate(0,index)
+        post = self.duplicate(index + 1 if type == 'pop' else index,self.length)
+        self.equals(pre)
+        if type == 'insert':
+            self.add(element)
+        self.union(post)
+##type index
+    def __check_index__(self,index):
+        if index == None or index < 0:
+            index = 0
+        if index > self.length -1:
+            index = self.length - 1
+        return index
+##insert
+    def inject(self, index, element):
+        self.__check_index__(index)
+        self.__interract__(index,element,'insert')         
+##pop    
+    def blup(self,index, is_return = True):
+        index = self.__check_index__(index)
+        if self.length == 0:
+            pop = None
+        else:
+            pop = self.elements[index][0]
+        self.__interract__(index,None,'pop')
+        if is_return:
+            return pop      
+##remove
+    def delete(self,element):
+        if self.position != None:
+            self.blup(self.position(element),False)
+##reverse
+    def mirror(self):
+        duple = self.duplicate()
+        self.clean()
+        for i in range(duple.length-1,-1,-1):
+            self.add(duple.elements[i][0])
+#sort        
+    def sort_hardest(self,reverse = False, key = None):
+        if reverse == True:
+            self.mirror()
+        pass
+    
+        
+l = slist()
+for i in range(0,5):
+    l.add(i)
+k = l.duplicate()
+for i in range(5,10):
+    k.add(i)
+l.union(k)
+l.inject(10,101)
+print(l.blup(11))
+l.delete(0)
+l.mirror()
+print(l.elements)
