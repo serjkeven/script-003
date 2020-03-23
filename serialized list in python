@@ -42,15 +42,20 @@ class slist():
         if to_pos == None:
             to_pos = self.length
         if to_pos != 0:
-            [new.elements.append(self.elements[i]) for i in range(from_pos, to_pos)]
+            for i in range(from_pos,to_pos):
+                new.add(self.elements[i][0])
         new.__update__()
+        self.__update__()
         return new
 ##count   
     def amount(self, element):      
         return sum(1 for elem in self.elements if elem[0] == element)
 ##extend
     def union(self, new):
-        [self.add(x[0]) for x in new.elements]
+        if self.length != 0 and new.length != 0:
+            self.elements[self.last][1] = new.elements[0][0]
+        self.elements += new.elements
+        self.__update__()
 ##index
     def position(self, element):
         if self.length != 0:
@@ -73,7 +78,7 @@ class slist():
         return index
 ##insert
     def inject(self, index, element):
-        self.__check_index__(index)
+        index = self.__check_index__(index)
         self.__interract__(index,element,'insert')         
 ##pop    
     def blup(self,index, is_return = True):
@@ -108,9 +113,12 @@ for i in range(0,5):
 k = l.duplicate()
 for i in range(5,10):
     k.add(i)
+print(l.elements)
 l.union(k)
+print(l.elements)
 l.inject(10,101)
-print(l.blup(11))
-l.delete(0)
+print(l.blup(9))
+l.delete(2)
+print(l.elements)
 l.mirror()
 print(l.elements)
